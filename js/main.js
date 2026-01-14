@@ -450,7 +450,22 @@ function openMenuModal() {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
 
-        // Re-initialize lucide icons for the modal
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+}
+
+function openImageModal(imageSrc, imageAlt) {
+    const modal = document.getElementById('menuModal');
+    const modalImage = modal.querySelector('.menu-modal-content img');
+
+    if (modal && modalImage) {
+        modalImage.src = imageSrc;
+        modalImage.alt = imageAlt || 'Menu Image';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
@@ -459,16 +474,13 @@ function openMenuModal() {
 
 function closeMenuModal(event) {
     const modal = document.getElementById('menuModal');
-    const modalContent = document.querySelector('.menu-modal-content');
 
-    // Close if clicking outside the modal content or on close button
     if (event.target === modal || event.target.closest('.modal-close')) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
     }
 }
 
-// Close modal on Escape key
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         const modal = document.getElementById('menuModal');
@@ -477,4 +489,16 @@ document.addEventListener('keydown', (e) => {
             document.body.style.overflow = '';
         }
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const menuCardImages = document.querySelectorAll('.menu-card-image img');
+
+    menuCardImages.forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openImageModal(img.src, img.alt);
+        });
+    });
 });
