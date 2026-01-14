@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all components
     initAOS();
     initNavbar();
     initMenuTabs();
@@ -9,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initLucideIcons();
 });
 
-/* ===== Initialize AOS (Animate on Scroll) ===== */
 function initAOS() {
     AOS.init({
         duration: 800,
@@ -20,27 +18,23 @@ function initAOS() {
     });
 }
 
-/* ===== Initialize Lucide Icons ===== */
 function initLucideIcons() {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
 }
 
-/* ===== Navbar Functionality ===== */
 function initNavbar() {
     const navbar = document.getElementById('navbar');
     const navbarToggle = document.getElementById('navbarToggle');
     const navbarMenu = document.getElementById('navbarMenu');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Scroll handler for navbar background
     let lastScroll = 0;
 
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
 
-        // Add scrolled class when scrolled down
         if (currentScroll > 50) {
             navbar.classList.add('scrolled');
         } else {
@@ -50,7 +44,6 @@ function initNavbar() {
         lastScroll = currentScroll;
     });
 
-    // Mobile menu toggle
     if (navbarToggle && navbarMenu) {
         navbarToggle.addEventListener('click', () => {
             navbarToggle.classList.toggle('active');
@@ -58,7 +51,6 @@ function initNavbar() {
             document.body.style.overflow = navbarMenu.classList.contains('active') ? 'hidden' : '';
         });
 
-        // Close menu when clicking on a link
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 navbarToggle.classList.remove('active');
@@ -67,7 +59,6 @@ function initNavbar() {
             });
         });
 
-        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!navbarMenu.contains(e.target) && !navbarToggle.contains(e.target)) {
                 navbarToggle.classList.remove('active');
@@ -77,7 +68,6 @@ function initNavbar() {
         });
     }
 
-    // Active nav link on scroll
     const sections = document.querySelectorAll('section[id]');
 
     window.addEventListener('scroll', () => {
@@ -97,7 +87,6 @@ function initNavbar() {
     });
 }
 
-/* ===== Menu Tabs Functionality ===== */
 function initMenuTabs() {
     const tabs = document.querySelectorAll('.menu-tab');
     const grids = document.querySelectorAll('.menu-grid');
@@ -106,24 +95,19 @@ function initMenuTabs() {
         tab.addEventListener('click', () => {
             const targetTab = tab.dataset.tab;
 
-            // Remove active class from all tabs and grids
             tabs.forEach(t => t.classList.remove('active'));
             grids.forEach(g => g.classList.remove('active'));
 
-            // Add active class to clicked tab and corresponding grid
             tab.classList.add('active');
             const targetGrid = document.getElementById(targetTab);
             if (targetGrid) {
                 targetGrid.classList.add('active');
-
-                // Refresh AOS for new visible elements
                 AOS.refresh();
             }
         });
     });
 }
 
-/* ===== Testimonial Slider ===== */
 function initTestimonialSlider() {
     const track = document.getElementById('testimonialTrack');
     const dotsContainer = document.getElementById('testimonialDots');
@@ -138,7 +122,6 @@ function initTestimonialSlider() {
     let cardsPerView = getCardsPerView();
     let autoplayInterval;
 
-    // Create dots
     function createDots() {
         if (!dotsContainer) return;
 
@@ -154,59 +137,50 @@ function initTestimonialSlider() {
         }
     }
 
-    // Get cards per view based on screen width
     function getCardsPerView() {
         if (window.innerWidth <= 991) return 1;
         if (window.innerWidth <= 1199) return 2;
         return 3;
     }
 
-    // Update slider position
     function updateSlider() {
         const cardWidth = cards[0].offsetWidth;
         const gap = 30;
         const offset = currentIndex * (cardWidth + gap);
         track.style.transform = `translateX(-${offset}px)`;
 
-        // Update dots
         const dots = dotsContainer?.querySelectorAll('.dot');
         dots?.forEach((dot, i) => {
             dot.classList.toggle('active', i === Math.floor(currentIndex / cardsPerView));
         });
     }
 
-    // Go to specific slide
     function goToSlide(index) {
         currentIndex = index * cardsPerView;
         if (currentIndex >= cardCount) currentIndex = 0;
         updateSlider();
     }
 
-    // Next slide
     function nextSlide() {
         currentIndex++;
         if (currentIndex >= cardCount - cardsPerView + 1) currentIndex = 0;
         updateSlider();
     }
 
-    // Previous slide
     function prevSlide() {
         currentIndex--;
         if (currentIndex < 0) currentIndex = cardCount - cardsPerView;
         updateSlider();
     }
 
-    // Start autoplay
     function startAutoplay() {
         autoplayInterval = setInterval(nextSlide, 5000);
     }
 
-    // Stop autoplay
     function stopAutoplay() {
         clearInterval(autoplayInterval);
     }
 
-    // Event listeners
     if (nextBtn) nextBtn.addEventListener('click', () => {
         nextSlide();
         stopAutoplay();
@@ -219,7 +193,6 @@ function initTestimonialSlider() {
         startAutoplay();
     });
 
-    // Touch/swipe support
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -242,7 +215,6 @@ function initTestimonialSlider() {
         startAutoplay();
     }, { passive: true });
 
-    // Handle resize
     let resizeTimeout;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
@@ -257,16 +229,13 @@ function initTestimonialSlider() {
         }, 250);
     });
 
-    // Initialize
     createDots();
     startAutoplay();
 
-    // Pause autoplay on hover
     track.addEventListener('mouseenter', stopAutoplay);
     track.addEventListener('mouseleave', startAutoplay);
 }
 
-/* ===== Back to Top Button ===== */
 function initBackToTop() {
     const backToTop = document.getElementById('backToTop');
 
@@ -288,7 +257,6 @@ function initBackToTop() {
     });
 }
 
-/* ===== Smooth Scroll for Anchor Links ===== */
 function initSmoothScroll() {
     const links = document.querySelectorAll('a[href^="#"]');
 
@@ -315,7 +283,6 @@ function initSmoothScroll() {
     });
 }
 
-/* ===== Counter Animation (Optional Enhancement) ===== */
 function animateCounters() {
     const counters = document.querySelectorAll('[data-counter]');
 
@@ -340,7 +307,6 @@ function animateCounters() {
     });
 }
 
-/* ===== Lazy Load Images (Performance Enhancement) ===== */
 function initLazyLoad() {
     const images = document.querySelectorAll('img[data-src]');
 
@@ -360,7 +326,6 @@ function initLazyLoad() {
     images.forEach(img => imageObserver.observe(img));
 }
 
-/* ===== Parallax Effect (Optional) ===== */
 function initParallax() {
     const parallaxElements = document.querySelectorAll('.parallax');
 
@@ -375,7 +340,6 @@ function initParallax() {
     });
 }
 
-/* ===== Form Validation (For Future Use) ===== */
 function validateForm(formElement) {
     const inputs = formElement.querySelectorAll('input[required], textarea[required]');
     let isValid = true;
@@ -392,7 +356,6 @@ function validateForm(formElement) {
     return isValid;
 }
 
-/* ===== WhatsApp Message Generator ===== */
 function generateWhatsAppMessage(items) {
     let message = 'Halo, saya mau pesan:\n\n';
 
@@ -405,9 +368,6 @@ function generateWhatsAppMessage(items) {
     return encodeURIComponent(message);
 }
 
-/* ===== Utility Functions ===== */
-
-// Debounce function
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -420,7 +380,6 @@ function debounce(func, wait) {
     };
 }
 
-// Throttle function
 function throttle(func, limit) {
     let inThrottle;
     return function (...args) {
@@ -432,7 +391,6 @@ function throttle(func, limit) {
     };
 }
 
-// Check if element is in viewport
 function isInViewport(element) {
     const rect = element.getBoundingClientRect();
     return (
@@ -443,7 +401,6 @@ function isInViewport(element) {
     );
 }
 
-/* ===== Menu Modal / Lightbox ===== */
 function openMenuModal() {
     const modal = document.getElementById('menuModal');
     if (modal) {
